@@ -23,6 +23,13 @@ let persons = [
         "number": "39-23-6423122"
       }
 ]
+const personsLength = persons.length;
+const date = new Date()
+console.log("persons length", personsLength)
+
+let info = 
+`<p> Phonebook has info for ${personsLength} people <p> 
+ <p> ${date} </p`
 
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>')
@@ -31,6 +38,10 @@ app.get('/', (request, response) => {
 app.get('/api/persons', (request, response) => {
     response.json(persons)
   })
+
+app.get('/api/info', (request, response) => {
+    response.send(info)
+})
   
 const PORT = 3001
 app.listen(PORT, () => {
