@@ -21,3 +21,19 @@ content-type: application/json
     "name": "",
     "number": "000-111-2222"
 }
+###
+POST http://localhost:3001/api/persons/
+content-type: application/json
+
+{
+    "name": "Name",
+    "number": ""
+}
+###
+POST http://localhost:3001/api/persons/
+content-type: application/json
+
+{
+    "name": "jane doe",
+    "number": "000-111-2222"
+}

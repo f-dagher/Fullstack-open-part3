@@ -79,10 +79,24 @@ const generateId = () => {
 //post a new person to the API
 app.post('/api/persons', (request, response) => {
   const body = request.body
+  const names = persons.map(person => person.name.toLowerCase());
 
-  if (!body.name || !body.number) {
+  if (!body.name) {
+    console.log('error, missing name')
     return response.status(400).json({ 
-      error: 'missing name or number' 
+      error: 'missing name' 
+    })
+  }
+  else if (!body.number) {
+    console.log('error, missing number')
+    return response.status(400).json({ 
+      error: 'missing number' 
+    })
+  }
+  if (names.includes(body.name.toLowerCase())){
+    console.log('error, name must be unique')
+    return response.status(400).json({ 
+      error: 'name must be unique' 
     })
   }
 
