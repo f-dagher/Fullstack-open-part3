@@ -31,16 +31,29 @@ let info =
 `<p> Phonebook has info for ${personsLength} people <p> 
  <p> ${date} </p`
 
+ //Regular main page
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>')
   })
-  
+//persons api, all persons
 app.get('/api/persons', (request, response) => {
     response.json(persons)
   })
-
+//info api as a webpage
 app.get('/api/info', (request, response) => {
     response.send(info)
+})
+
+//get a single person from phonebook. Respond with error if there isn't an ID.
+app.get('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const person = persons.find(person => person.id === id)
+
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).end()
+  }
 })
   
 const PORT = 3001
