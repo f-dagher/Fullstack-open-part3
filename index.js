@@ -1,3 +1,4 @@
+const { response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
@@ -26,7 +27,10 @@ let persons = [
       }
 ]
 app.use(express.json())
-app.use(morgan('tiny'))
+
+//morgan middleware
+morgan.token('body', (request, response) => JSON.stringify(request.body))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 const date = new Date()
 
@@ -65,7 +69,7 @@ app.get('/api/persons/:id', (request, response) => {
 //delete a person from phonebook
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
-  console.log(`deleting name with ${id}`)
+  console.log(`deleting name with id ${id}`)
   persons = persons.filter(person => person.id !== id)
 
   response.status(204).end()
