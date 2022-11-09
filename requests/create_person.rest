@@ -37,3 +37,11 @@ content-type: application/json
     "name": "jane doe",
     "number": "000-111-2222"
 }
+###
+POST https://fdagher-phonebook.fly.dev/api/persons
+content-type: application/json
+
+{
+    "name": "John Doe",
+    "number": "001-111-2222"
+}
