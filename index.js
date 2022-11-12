@@ -1,8 +1,11 @@
+require('dotenv').config()
 const { response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
+
+const Person = require('./models/person')
 
 
 let persons = [
@@ -43,10 +46,15 @@ const date = new Date()
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>')
   })
+
 //persons api, all persons
 app.get('/api/persons', (request, response) => {
+  Person.find({}).then(persons => {
     response.json(persons)
   })
+})
+
+
 
 //info api as a webpage
 app.get('/api/info', (request, response) => {
@@ -91,7 +99,7 @@ const generateId = () => {
 //post a new person to the API
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  const names = persons.map(person => person.name.toLowerCase());
+  //const names = persons.map(person => person.name.toLowerCase());
 
   if (!body.name) {
     console.log('error, missing name')
@@ -105,25 +113,29 @@ app.post('/api/persons', (request, response) => {
       error: 'missing number' 
     })
   }
-  if (names.includes(body.name.toLowerCase())){
-    console.log('error, name must be unique')
-    return response.status(400).json({ 
-      error: 'name must be unique' 
-    })
-  }
 
-  const person = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  }
+  })
 
-  persons = persons.concat(person)
-  console.log(`added ${person.name}`)
-  response.json(person)
+  person.save().then(result => {
+    console.log(`added ${body.name} number ${body.number}`)
+    response.json(person)
+  })
 })
 
 const PORT = process.env.PORT || "8080";
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+//removed ability to check if name is unique for now
+/*
+  if (names.includes(body.name.toLowerCase())){
+    console.log('error, name must be unique')
+    return response.status(400).json({ 
+      error: 'name must be unique' 
+    })
+  }
+*/
