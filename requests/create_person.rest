@@ -45,3 +45,5 @@ content-type: application/json
     "name": "John Doe",
     "number": "001-111-2222"
 }
+###
+DELETE  https://fdagher-phonebook.fly.dev/api/hdfgwerwer
