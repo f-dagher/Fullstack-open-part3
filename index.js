@@ -35,25 +35,28 @@ app.get('/api/persons', (request, response) => {
 
 //info api as a webpage
 app.get('/api/info', (request, response) => {
-  let personsLength = persons.length;
-  let info = 
+  Person.find({}).then(persons => {
+    let personsLength = persons.length;
+    let info = 
     `
     <p> Phonebook has info for ${personsLength} people <p> 
     <p> ${date} </p
     `
   response.send(info)
+  })
 })
 
 //get a single person from phonebook. Respond with error if there isn't an ID.
-app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(person => person.id === id)
-
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+  .then(person => {
+    if (person){
+      response.json(person)
+    } else {
+      response.status(404).end()
+    }
+  })
+  .catch(error => next(error))
 })
 
 //delete a person from phonebook
@@ -92,6 +95,22 @@ app.post('/api/persons', (request, response) => {
     console.log(`added ${body.name} number ${body.number}`)
     response.json(person)
   })
+})
+
+//Update a person's number if ID exists (i.e Name is in the phonebook)
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { name: body.name, number: body.number})
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -168,5 +187,17 @@ const generateId = () => {
     : 0
   return Math.floor(Math.random() * 1000000000) + maxId;
 }
+
+//get a single person from phonebook. Respond with error if there isn't an ID.
+app.get('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const person = persons.find(person => person.id === id)
+
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).end()
+  }
+})
 
 */
