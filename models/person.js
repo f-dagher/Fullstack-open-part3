@@ -11,10 +11,25 @@ mongoose.connect(url)
     console.log('error connecting to MongoDB:', error.message)
   })
 
+function valNumber (val) {
+  const format = /^\d{2,3}\-\d+$/;
+  return format.test(val);
+}
+
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name:{
+      type: String,
+      minLength: 3,
+      required: true
+    },
+    number:{
+      type: String,
+      minLength: 8,
+      validate: valNumber,
+      required: true
+    } 
 })
+
 
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
