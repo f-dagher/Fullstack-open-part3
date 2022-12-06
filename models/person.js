@@ -4,30 +4,30 @@ const url = process.env.MONGODB_URI
 
 console.log('connecting to', url)
 mongoose.connect(url)
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch((error) => {
     console.log('error connecting to MongoDB:', error.message)
   })
-
+//
 function valNumber (val) {
-  const format = /^\d{2,3}\-\d+$/;
-  return format.test(val);
+  const format = /^\d{2,3}-\d+$/
+  return format.test(val)
 }
 
 const personSchema = new mongoose.Schema({
-    name:{
-      type: String,
-      minLength: 3,
-      required: true
-    },
-    number:{
-      type: String,
-      minLength: 8,
-      validate: valNumber,
-      required: true
-    } 
+  name:{
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  number:{
+    type: String,
+    minLength: 8,
+    validate: valNumber,
+    required: true
+  }
 })
 
 

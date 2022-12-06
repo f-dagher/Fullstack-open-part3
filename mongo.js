@@ -15,31 +15,31 @@ const url =`mongodb+srv://fdagher:${password}@cluster0.zh63jtr.mongodb.net/phone
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
+  name: String,
+  number: String,
 })
 
 const Person = mongoose.model('Person', personSchema)
 
 const person = new Person({
-    name: personName,
-    number: personNumber,
+  name: personName,
+  number: personNumber,
 })
 
 
 if (personName && personNumber){
-    person.save().then(result => {
-        console.log(`added ${personName} number ${personNumber}`)
-        mongoose.connection.close()
-    })
+  person.save().then(() => {
+    console.log(`added ${personName} number ${personNumber}`)
+    mongoose.connection.close()
+  })
 }
 else {
-    Person.find({}).then(result => {
-        result.forEach(person => {
-          console.log(person)
-        })
-        mongoose.connection.close()
-      })
+  Person.find({}).then(result => {
+    result.forEach(person => {
+      console.log(person)
+    })
+    mongoose.connection.close()
+  })
 }
 
 
